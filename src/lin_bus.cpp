@@ -95,8 +95,12 @@ bool lin_bus::slave(uint16_t baudrate, uint8_t ident)
 bool lin_bus::begin(uint16_t baudrate)
 {  
  unsigned long begintime,currentTime;
-// initialize serial interface   
-  _serial->begin(_baudrate, SERIAL_8N1);
+// initialize serial interface
+#if defined(ARDUINO_ARCH_SAM)
+  _serial->begin(_baudrate);  // Arduino Due
+#else
+  _serial->begin(_baudrate, SERIAL_8N1);  // AVR (Uno/Mega)
+#endif
 //    begintime = millis();
 //    while(!(*_serial))
 //    {
